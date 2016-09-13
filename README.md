@@ -24,8 +24,7 @@ Run it
 ------
 
 ```sh
-go get -t -d -v ./...
-go build -v
+make
 ./rabot
 ```
 
