@@ -17,6 +17,23 @@ AWS_SECRET_ACCESS_KEY
 SLACK_WEBHOOK_URL
 SLACK_TOKEN
 IMAGE_NAME (default: atsnngs/radiko-recorder-s3)
+DEBUG
+```
+
+Run it
+------
+
+```sh
+go get -t -d -v ./...
+go build -v
+./rabot
+```
+
+or
+
+```sh
+docker pull atsnngs/rabot
+docker run -v /var/run/docker.sock:/var/run/docker.sock --env-file=.envrc atsnngs/rabot
 ```
 
 How it works
@@ -27,7 +44,5 @@ How it works
 @rabot list containers
 @rabot remove container 452ca45d449a
 ```
-
-
 
 [docker-radiko-recorder-s3]: https://github.com/ngs/docker-radiko-recorder-s3

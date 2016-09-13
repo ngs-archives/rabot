@@ -16,7 +16,6 @@ import (
 	"regexp"
 	"strings"
 	"time"
-	// "github.com/docker/go-connections/sockets"
 )
 
 func main() {
