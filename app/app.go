@@ -43,6 +43,9 @@ func (app *App) ManageConnection() {
 
 func (app *App) BuildReplyMessage(ev *slack.MessageEvent) string {
 	text := ev.Text
+	if app.Commands.Ping.MatchString(text) {
+		return "pong"
+	}
 	if app.Commands.List.MatchString(text) {
 		return app.ListContainers()
 	}
