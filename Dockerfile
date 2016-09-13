@@ -11,6 +11,7 @@ RUN go get "github.com/docker/docker/api/types" && \
     go get "golang.org/x/net/context"
 
 ADD rabot.go /go/src/github.com/ngs/rabot/rabot.go
+ADD app /go/src/github.com/ngs/rabot/app
 RUN go install github.com/ngs/rabot
 
 ENTRYPOINT ["/go/bin/rabot"]
