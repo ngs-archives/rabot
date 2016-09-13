@@ -13,7 +13,7 @@ func _TestCommands(t *testing.T, regexp *regexp.Regexp, commands []string) {
 	}
 }
 
-func TestBuildSetBotID(t *testing.T) {
+func TestListCommand(t *testing.T) {
 	app := &App{}
 	app.SetBotID("rabot-test")
 	_TestCommands(t, app.Commands.List, []string{
@@ -22,15 +22,30 @@ func TestBuildSetBotID(t *testing.T) {
 		"<@rabot-test>  ls  containers ",
 		"<@rabot-test>  ls ",
 	})
+}
+
+func TestStartCommand(t *testing.T) {
+	app := &App{}
+	app.SetBotID("rabot-test")
 	_TestCommands(t, app.Commands.Start, []string{
 		"<@rabot-test>  start  record    ALPHA-STATION for  12 min ",
 		"<@rabot-test>  start  recording    ALPHA-STATION   1minute ",
 	})
+}
+
+func TestRemoveCommand(t *testing.T) {
+	app := &App{}
+	app.SetBotID("rabot-test")
 	_TestCommands(t, app.Commands.Remove, []string{
 		"<@rabot-test>  remove  container  foo  ",
 		"<@rabot-test>  rm  container  foo  ",
 		"<@rabot-test>  rm   foo  ",
 	})
+}
+
+func TestPingCommand(t *testing.T) {
+	app := &App{}
+	app.SetBotID("rabot-test")
 	_TestCommands(t, app.Commands.Ping, []string{
 		"<@rabot-test>  ping  ",
 	})

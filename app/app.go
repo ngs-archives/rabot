@@ -50,10 +50,10 @@ func (app *App) BuildReplyMessage(ev *slack.MessageEvent) string {
 		channel, err := app.Slack.GetChannelInfo(ev.Channel)
 		if err != nil {
 			return err.Error()
-		} else {
-			return app.StartContainer(res[1], res[2], channel.Name)
 		}
-	} else if res := app.Commands.Remove.FindStringSubmatch(text); res != nil {
+		return app.StartContainer(res[1], res[2], channel.Name)
+	}
+	if res := app.Commands.Remove.FindStringSubmatch(text); res != nil {
 		return app.RemoveContainer(res[1])
 	}
 	return ""
