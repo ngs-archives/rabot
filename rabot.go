@@ -36,6 +36,7 @@ func main() {
 
 	var listCommand = regexp.MustCompile(`\A$`)
 	var startCommand = regexp.MustCompile(`\A$`)
+	var removeCommand = regexp.MustCompile(`\A$`)
 
 	rtm := api.NewRTM()
 	go rtm.ManageConnection()
@@ -49,8 +50,8 @@ Loop:
 				botID := ev.Info.User.ID
 				listCommand = regexp.MustCompile(`\A<@` + botID + `>\s+list\s+containers?`)
 				startCommand = regexp.MustCompile(`\A<@` + botID + `>\s+start\s+record(?:ing)?\s+(\S+)\s+(?:for\s+)?(\d+)\s*min(?:utes?)?`)
+				removeCommand = regexp.MustCompile(`\A<@` + botID + `>\s+remove\s+(?:container\s+)?(\S+)`)
 			case *slack.MessageEvent:
-				fmt.Printf("%: s", ev)
 				if listCommand.MatchString(ev.Text) {
 					table := ListContainers(client)
 					rtm.SendMessage(rtm.NewOutgoingMessage(table, ev.Channel))
@@ -60,6 +61,9 @@ Loop:
 						log.Fatal(err)
 					}
 					cres := StartContainer(client, res[1], res[2], channel.Name)
+					rtm.SendMessage(rtm.NewOutgoingMessage(cres, ev.Channel))
+				} else if res := removeCommand.FindStringSubmatch(ev.Text); res != nil {
+					cres := RemoveContainer(client, res[1])
 					rtm.SendMessage(rtm.NewOutgoingMessage(cres, ev.Channel))
 				}
 			case *slack.RTMError:
@@ -126,12 +130,20 @@ func StartContainer(client *client.Client, station string, minutes string, chann
 	hostConfig := &container.HostConfig{
 		AutoRemove: true}
 	ctx := context.Background()
-	createResponse, err := client.ContainerCreate(ctx, config, hostConfig, nil, "")
+	res, err := client.ContainerCreate(ctx, config, hostConfig, nil, "")
 	if err != nil {
 		return err.Error()
 	}
-	if err := client.ContainerStart(ctx, createResponse.ID, types.ContainerStartOptions{}); err != nil {
+	if err := client.ContainerStart(ctx, res.ID, types.ContainerStartOptions{}); err != nil {
 		return err.Error()
 	}
-	return "Started container " + stringid.TruncateID(createResponse.ID)
+	return "Started container " + stringid.TruncateID(res.ID)
+}
+
+func RemoveContainer(client *client.Client, containerID string) string {
+	ctx := context.Background()
+	if err := client.ContainerRemove(ctx, containerID, types.ContainerRemoveOptions{Force: true}); err != nil {
+		return err.Error()
+	}
+	return "Successfully removed " + containerID
 }
