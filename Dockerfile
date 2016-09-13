@@ -1,8 +1,6 @@
 FROM golang:1.7.1
 MAINTAINER Atsushi Nagase<a@ngs.io>
 
-VOLUME ["/var/run/docker.sock"]
-
 RUN go get "github.com/docker/docker/api/types" && \
     go get "github.com/docker/docker/client" && \
     go get "github.com/nlopes/slack" && \
