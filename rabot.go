@@ -45,6 +45,7 @@ Loop:
 	for {
 		select {
 		case msg := <-rtm.IncomingEvents:
+			var reply = ""
 			switch ev := msg.Data.(type) {
 			case *slack.ConnectedEvent:
 				botID := ev.Info.User.ID
@@ -53,18 +54,19 @@ Loop:
 				removeCommand = regexp.MustCompile(`\A<@` + botID + `>\s+remove\s+(?:container\s+)?(\S+)`)
 			case *slack.MessageEvent:
 				if listCommand.MatchString(ev.Text) {
-					table := ListContainers(client)
-					rtm.SendMessage(rtm.NewOutgoingMessage(table, ev.Channel))
+					reply = ListContainers(client)
 				} else if res := startCommand.FindStringSubmatch(ev.Text); res != nil {
 					channel, err := api.GetChannelInfo(ev.Channel)
 					if err != nil {
-						log.Fatal(err)
+						reply = err.Error()
+					} else {
+						reply = StartContainer(client, res[1], res[2], channel.Name)
 					}
-					cres := StartContainer(client, res[1], res[2], channel.Name)
-					rtm.SendMessage(rtm.NewOutgoingMessage(cres, ev.Channel))
 				} else if res := removeCommand.FindStringSubmatch(ev.Text); res != nil {
-					cres := RemoveContainer(client, res[1])
-					rtm.SendMessage(rtm.NewOutgoingMessage(cres, ev.Channel))
+					reply = RemoveContainer(client, res[1])
+				}
+				if reply != "" {
+					rtm.SendMessage(rtm.NewOutgoingMessage("<@"+ev.User+"> "+reply, ev.Channel))
 				}
 			case *slack.RTMError:
 				fmt.Printf("Error: %s\n", ev.Error())
@@ -104,7 +106,7 @@ func ListContainers(client *client.Client) string {
 	}
 	table.SetBorder(false)
 	table.Render()
-	return "```\n" + buf.String() + "```\n"
+	return "\n```\n" + buf.String() + "```\n"
 }
 
 func StartContainer(client *client.Client, station string, minutes string, channel string) string {
