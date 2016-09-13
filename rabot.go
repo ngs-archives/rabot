@@ -99,8 +99,12 @@ func ListContainers(client *client.Client) string {
 }
 
 func StartContainer(client *client.Client, station string, minutes string, channel string) string {
+	imageName := os.Getenv("IMAGE_NAME")
+	if imageName == "" {
+		imageName = "atsnngs/radiko-recorder-s3"
+	}
 	config := &container.Config{
-		Image:        os.Getenv("IMAGE_NAME"),
+		Image:        imageName,
 		AttachStdin:  false,
 		AttachStdout: false,
 		AttachStderr: false,
