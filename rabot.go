@@ -34,8 +34,8 @@ func main() {
 		botname = "rabot"
 	}
 
-	listCommand := regexp.MustCompile(`\A` + botname + `\s+list\s+containers?`)
-	startCommand := regexp.MustCompile(`\A` + botname + `\s+start\s+record(?:ing)?\s+(\S+)\s+(?:for\s+)?(\d+)\s*min(?:utes?)?`)
+	var listCommand = regexp.MustCompile(`\A$`)
+	var startCommand = regexp.MustCompile(`\A$`)
 
 	rtm := api.NewRTM()
 	go rtm.ManageConnection()
@@ -45,7 +45,12 @@ Loop:
 		select {
 		case msg := <-rtm.IncomingEvents:
 			switch ev := msg.Data.(type) {
+			case *slack.ConnectedEvent:
+				botID := ev.Info.User.ID
+				listCommand = regexp.MustCompile(`\A<@` + botID + `>\s+list\s+containers?`)
+				startCommand = regexp.MustCompile(`\A<@` + botID + `>\s+start\s+record(?:ing)?\s+(\S+)\s+(?:for\s+)?(\d+)\s*min(?:utes?)?`)
 			case *slack.MessageEvent:
+				fmt.Printf("%: s", ev)
 				if listCommand.MatchString(ev.Text) {
 					table := ListContainers(client)
 					rtm.SendMessage(rtm.NewOutgoingMessage(table, ev.Channel))
@@ -128,5 +133,5 @@ func StartContainer(client *client.Client, station string, minutes string, chann
 	if err := client.ContainerStart(ctx, createResponse.ID, types.ContainerStartOptions{}); err != nil {
 		return err.Error()
 	}
-	return "Started container `" + stringid.TruncateID(createResponse.ID) + "`"
+	return "Started container " + stringid.TruncateID(createResponse.ID)
 }
