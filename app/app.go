@@ -64,6 +64,6 @@ func (app *App) BuildReplyMessage(ev *slack.MessageEvent) string {
 
 func (app *App) HandleMessage(ev *slack.MessageEvent) {
 	if reply := app.BuildReplyMessage(ev); reply != "" {
-		app.RTM.SendMessage(app.RTM.NewOutgoingMessage("<@"+ev.User+"> "+reply, ev.Channel))
+		app.Slack.PostMessage(ev.Channel, "<@"+ev.User+"> "+reply, slack.PostMessageParameters{})
 	}
 }
