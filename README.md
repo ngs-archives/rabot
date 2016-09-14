@@ -1,7 +1,8 @@
 Rabot
 =====
 
-[![Docker Automated buil](https://img.shields.io/docker/automated/atsnngs/rabot.svg?maxAge=2592000)](https://hub.docker.com/r/atsnngs/rabot/)
+[![CircleCI](https://circleci.com/gh/ngs/rabot.svg?style=svg)](https://circleci.com/gh/ngs/rabot)
+[![Docker Automated build](https://img.shields.io/docker/automated/atsnngs/rabot.svg?maxAge=2592000)](https://hub.docker.com/r/atsnngs/rabot/)
 
 The Chatbot deals with [docker-radiko-recorder-s3]
 
