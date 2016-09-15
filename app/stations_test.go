@@ -4,7 +4,7 @@ import "testing"
 
 // http://radiko.jp/v2/station/list/JP13.xml
 
-const MockResult = `<?xml version="1.0" encoding="UTF-8" ?>
+const MockStationsXML = `<?xml version="1.0" encoding="UTF-8" ?>
 <stations area_id="JP13" area_name="TOKYO JAPAN">
  <station>
     <id>TBS</id>
@@ -281,6 +281,25 @@ const MockResult = `<?xml version="1.0" encoding="UTF-8" ?>
 </station>
 </stations>
 `
+
+func TestGetStations(t *testing.T) {
+	stations := GetStations(MockStationsXML)
+	if len(stations) != 13 {
+		t.Errorf("Expected %d but got %d", 13, len(stations))
+	}
+	if stations[0].ID != "TBS" {
+		t.Errorf("Expected %s but got %s", "TBS", stations[0].ID)
+	}
+	if stations[0].Name != "TBSラジオ" {
+		t.Errorf("Expected %s but got %s", "TBSラジオ", stations[0].Name)
+	}
+	if stations[0].AsciiName != "TBS RADIO" {
+		t.Errorf("Expected %s but got %s", "TBS RADIO", stations[0].AsciiName)
+	}
+	if stations[0].Href != "http://www.tbs.co.jp/radio/" {
+		t.Errorf("Expected %s but got %s", "http://www.tbs.co.jp/radio/", stations[0].Href)
+	}
+}
 
 func TestListStations(t *testing.T) {
 	t.Skip("Not yet implemented")
