@@ -5,15 +5,22 @@ import (
 )
 
 func TestFindPrefectureByID(t *testing.T) {
-	res := FindPrefecture("JP26")
+	res, err := FindPrefecture("JP26")
 	if res.Name != "京都" {
-		t.Errorf("Expected 京都 but got %v", res.Name)
+		t.Errorf("Expected 京都 but got %v. %v", res.Name, err)
 	}
 }
 
 func TestFindPrefectureByName(t *testing.T) {
-	res := FindPrefecture("京都")
+	res, err := FindPrefecture("京都")
 	if res.ID != "JP26" {
-		t.Errorf("Expected JP26 but got %v", res.ID)
+		t.Errorf("Expected JP26 but got %v. %v", res.ID, err)
+	}
+}
+
+func TestFindPrefectureNotFound(t *testing.T) {
+	_, err := FindPrefecture("SFO")
+	if err.Error() != "Could not find a station with id or name SFO" {
+		t.Errorf("Expected error but got `%v`", err)
 	}
 }

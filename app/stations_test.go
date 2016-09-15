@@ -1,6 +1,9 @@
 package app
 
-import "testing"
+import (
+	"github.com/jarcoal/httpmock"
+	"testing"
+)
 
 // http://radiko.jp/v2/station/list/JP13.xml
 
@@ -282,8 +285,7 @@ const MockStationsXML = `<?xml version="1.0" encoding="UTF-8" ?>
 </stations>
 `
 
-func TestGetStations(t *testing.T) {
-	stations := GetStations(MockStationsXML)
+func _TestStations(t *testing.T, stations []Station) {
 	if len(stations) != 13 {
 		t.Errorf("Expected %d but got %d", 13, len(stations))
 	}
@@ -301,6 +303,31 @@ func TestGetStations(t *testing.T) {
 	}
 }
 
+func _SetupMockHTTP() {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	httpmock.RegisterResponder("GET", "http://radiko.jp/v2/station/list/JP13.xml",
+		httpmock.NewStringResponder(200, MockStationsXML))
+}
+
+func TestGetStations(t *testing.T) {
+	stations := GetStations([]byte(MockStationsXML))
+	_TestStations(t, stations)
+}
+
+func TestFetchStations(t *testing.T) {
+	_SetupMockHTTP()
+	stations, err := FetchStations("東京")
+	if err != nil {
+		t.Errorf("Got error %v", err)
+	}
+	_TestStations(t, stations)
+}
+
 func TestListStations(t *testing.T) {
-	t.Skip("Not yet implemented")
+	_SetupMockHTTP()
+	app := &App{}
+	table := app.ListStations("東京")
+	t.Log(table)
 }

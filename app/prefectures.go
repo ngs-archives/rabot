@@ -1,5 +1,7 @@
 package app
 
+import "fmt"
+
 type Prefecture struct {
 	ID   string
 	Name string
@@ -55,11 +57,11 @@ var Prefectures = []Prefecture{
 	{"JP47", "沖縄"},
 }
 
-func FindPrefecture(IDorName string) *Prefecture {
+func FindPrefecture(IDorName string) (*Prefecture, error) {
 	for _, v := range Prefectures {
 		if v.ID == IDorName || v.Name == IDorName {
-			return &v
+			return &v, nil
 		}
 	}
-	return nil
+	return nil, fmt.Errorf("Could not find a station with id or name %s", IDorName)
 }
