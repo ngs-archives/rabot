@@ -63,5 +63,5 @@ func FindPrefecture(IDorName string) (*Prefecture, error) {
 			return &v, nil
 		}
 	}
-	return nil, fmt.Errorf("Could not find a station with id or name %s", IDorName)
+	return nil, fmt.Errorf("Could not find a prefecture with id or name %s", IDorName)
 }

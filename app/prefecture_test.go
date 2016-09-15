@@ -20,7 +20,7 @@ func TestFindPrefectureByName(t *testing.T) {
 
 func TestFindPrefectureNotFound(t *testing.T) {
 	_, err := FindPrefecture("SFO")
-	if err.Error() != "Could not find a station with id or name SFO" {
+	if err.Error() != "Could not find a prefecture with id or name SFO" {
 		t.Errorf("Expected error but got `%v`", err)
 	}
 }

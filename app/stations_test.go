@@ -324,10 +324,3 @@ func TestFetchStations(t *testing.T) {
 	}
 	_TestStations(t, stations)
 }
-
-func TestListStations(t *testing.T) {
-	_SetupMockHTTP()
-	app := &App{}
-	table := app.ListStations("東京")
-	t.Log(table)
-}
