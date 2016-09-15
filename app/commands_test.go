@@ -50,3 +50,27 @@ func TestPingCommand(t *testing.T) {
 		"<@rabot-test>  ping  ",
 	})
 }
+
+func TestPrefecturesCommand(t *testing.T) {
+	commands := &Commands{}
+	commands.SetBotID("rabot-test")
+	_TestCommands(t, commands.Prefectures, []string{
+		"<@rabot-test>  list   prefectures  ",
+		"<@rabot-test>  list   prefecture  ",
+		"<@rabot-test>  ls   prefectures  ",
+		"<@rabot-test>  ls   prefecture  ",
+		"<@rabot-test>  list   prefs  ",
+		"<@rabot-test>  list   pref  ",
+		"<@rabot-test>  ls   prefs  ",
+		"<@rabot-test>  ls   pref  ",
+	})
+}
+
+func TestStationsCommand(t *testing.T) {
+	commands := &Commands{}
+	commands.SetBotID("rabot-test")
+	_TestCommands(t, commands.Stations, []string{
+		"<@rabot-test>  list   stations  京都   ",
+		"<@rabot-test>  ls   stations  京都   ",
+	})
+}

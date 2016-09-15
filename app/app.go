@@ -59,6 +59,12 @@ func (app *App) BuildReplyMessage(ev *slack.MessageEvent) string {
 	if res := app.Commands.Remove.FindStringSubmatch(text); res != nil {
 		return app.RemoveContainer(res[1])
 	}
+	if app.Commands.Prefectures.MatchString(text) {
+		return app.ListPrefectures()
+	}
+	if res := app.Commands.Stations.FindStringSubmatch(text); res != nil {
+		return app.ListStations(res[1])
+	}
 	return ""
 }
 

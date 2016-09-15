@@ -14,10 +14,10 @@ type Commands struct {
 }
 
 func (commands *Commands) SetBotID(botID string) {
-	commands.List = regexp.MustCompile(`\A<@` + botID + `>\s+(?:list|ls)(?:\s+containers?)?`)
-	commands.Start = regexp.MustCompile(`\A<@` + botID + `>\s+start\s+record(?:ing)?\s+(\S+)\s+(?:for\s+)?(\d+)\s*min(?:utes?)?`)
-	commands.Remove = regexp.MustCompile(`\A<@` + botID + `>\s+(?:remove|rm)\s+(?:container\s+)?(\S+)`)
-	commands.Ping = regexp.MustCompile(`\A<@` + botID + `>\s+ping`)
-	commands.Prefectures = regexp.MustCompile(`\A<@` + botID + `>\s+(?:list|ls)\s+pref(?:ecture)?s?`)
-	commands.Stations = regexp.MustCompile(`\A<@` + botID + `>\s+(?:list|ls)\s+stationss?\s+(\S)+`)
+	commands.List = regexp.MustCompile(`\A<@` + botID + `>\s+(?:list|ls)(?:\s+containers?)?\s*$`)
+	commands.Start = regexp.MustCompile(`\A<@` + botID + `>\s+start\s+record(?:ing)?\s+(\S+)\s+(?:for\s+)?(\d+)\s*min(?:utes?)?\s*$`)
+	commands.Remove = regexp.MustCompile(`\A<@` + botID + `>\s+(?:remove|rm)\s+(?:container\s+)?(\S+)\s*$`)
+	commands.Ping = regexp.MustCompile(`\A<@` + botID + `>\s+ping\s*$`)
+	commands.Prefectures = regexp.MustCompile(`\A<@` + botID + `>\s+(?:list|ls)\s+pref(?:ecture)?s?\s*$`)
+	commands.Stations = regexp.MustCompile(`\A<@` + botID + `>\s+(?:list|ls)\s+stationss?\s+(\S+)\s*$`)
 }
